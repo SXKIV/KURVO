@@ -1,0 +1,492 @@
+/* =========================================================
+   KURVO · piloto alpha
+   PROVISIONAL: todos los valores visuales son propuestas del
+   borrador DESIGN.md v0. Nada de esto está decidido.
+   ========================================================= */
+
+/* ---------- Tokens de diseño ----------
+   Cada "tinta" redefine el mismo conjunto de variables.
+   Un perfil futuro podría traer sus propios valores. */
+:root {
+  --desorden: 0.5;               /* 0 = derecho · 1 = kurvo */
+  --giro: calc(var(--desorden) * 1deg);
+  --corrimiento: calc(var(--desorden) * 6px);
+
+  /* A — Fotocopia de facultad (por defecto) */
+  --papel: #f1ede3;
+  --tinta: #1a1a1a;
+  --acento: #e8f53a;             /* resaltador */
+  --bloque: #d9d4c5;             /* gris de copia */
+  --titulo-color: var(--tinta);
+  --registro: rgb(26 26 26 / .22);
+  --mesa: #a9a395;
+  --letra-texto: "Courier Prime", "Courier New", monospace;
+  --letra-titulo: "Anton", "Impact", sans-serif;
+  --letra-mano: "Reenie Beanie", cursive;
+  --tam-mano: 1.9rem;
+  --titulo-espaciado: -0.01em;
+  --titulo-transform: uppercase;
+  --grano-opacidad: .5;
+}
+
+:root[data-tinta="riso"] {
+  /* B — Riso de correspondencia */
+  --papel: #f6efdf;
+  --tinta: #1f2a6b;
+  --acento: #ffd400;
+  --bloque: #ffd400;
+  --titulo-color: var(--tinta);
+  --registro: #e8457f;           /* rosa fluor: solo decorativo */
+  --mesa: #e2d3b4;
+  --letra-texto: "Space Mono", monospace;
+  --letra-titulo: "Rubik Mono One", sans-serif;
+  --letra-mano: "Special Elite", monospace;
+  --tam-mano: 1.15rem;
+  --titulo-espaciado: -0.04em;
+  --titulo-transform: none;
+  --grano-opacidad: .32;
+}
+
+:root[data-tinta="herbario"] {
+  /* C — Herbario sensorial */
+  --papel: #ece6f2;
+  --tinta: #2e1d3b;
+  --acento: #c9a77c;             /* kraft */
+  --bloque: #c9a77c;
+  --titulo-color: #6b4f8a;       /* lavanda oscura: 5.5:1 */
+  --registro: rgb(107 79 138 / .18);
+  --mesa: #2e1d3b;
+  --letra-texto: "EB Garamond", Georgia, serif;
+  --letra-titulo: "Fraunces", Georgia, serif;
+  --letra-mano: "Caveat", cursive;
+  --tam-mano: 1.7rem;
+  --titulo-espaciado: -0.02em;
+  --titulo-transform: none;
+  --grano-opacidad: .25;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background-color: var(--mesa);
+  color: var(--tinta);
+  font-family: var(--letra-texto);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  transition: background-color .4s ease;
+}
+
+:root[data-tinta="herbario"] body { font-size: 1.1875rem; line-height: 1.65; }
+
+a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+:focus-visible {
+  outline: 3px solid var(--tinta);
+  outline-offset: 3px;
+}
+
+mark {
+  background: linear-gradient(transparent 12%, var(--acento) 12%, var(--acento) 88%, transparent 88%);
+  color: var(--tinta);
+  padding: 0 .15em;
+}
+
+.visualmente-oculto {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.saltar {
+  position: absolute;
+  left: 1rem; top: -4rem;
+  z-index: 100;
+  background: var(--papel);
+  padding: .5rem 1rem;
+  border: 2px solid var(--tinta);
+}
+.saltar:focus { top: 1rem; }
+
+/* ---------- Sello ALPHA ---------- */
+.sello {
+  position: fixed;
+  top: .9rem; right: .9rem;
+  z-index: 50;
+  margin: 0;
+  padding: .35rem .7rem .4rem;
+  display: flex; flex-direction: column; align-items: center;
+  line-height: 1;
+  background: rgb(255 255 255 / .82);
+  color: #8b1a1a;
+  border: 3px double #8b1a1a;
+  transform: rotate(-7deg);
+  font-family: "Courier Prime", monospace;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px rgb(255 255 255 / .82);
+}
+.sello strong {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-size: 1.9rem;
+  letter-spacing: .12em;
+}
+.sello span { font-size: .85rem; font-weight: 700; }
+
+/* ---------- Mesa de controles ---------- */
+.mesa {
+  position: relative;
+  z-index: 40;
+  margin: 4.75rem 1rem 1.5rem;
+  padding: .9rem 1rem 1rem;
+  background: var(--papel);
+  color: var(--tinta);
+  border: 2px solid var(--tinta);
+  transform: rotate(calc(var(--giro) * -.6));
+}
+/* cinta adhesiva */
+.mesa::before {
+  content: "";
+  position: absolute;
+  top: -.8rem; left: 45%;
+  width: 5.5rem; height: 1.5rem;
+  background: rgb(255 255 240 / .55);
+  border: 1px solid rgb(0 0 0 / .08);
+  transform: rotate(4deg);
+}
+.mesa__titulo {
+  margin: 0 0 .5rem;
+  font-family: var(--letra-mano);
+  font-size: var(--tam-mano);
+  font-weight: 400;
+  line-height: 1.1;
+}
+.tintas { border: 0; margin: 0; padding: 0; display: grid; gap: .35rem; }
+.tinta {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .3rem .4rem;
+  cursor: pointer;
+  font-size: .95rem;
+  line-height: 1.25;
+}
+.tinta input { margin: 0; accent-color: var(--tinta); width: 1.1rem; height: 1.1rem; flex: none; }
+.tinta:has(input:checked) { background: var(--bloque); }
+.tinta__muestra {
+  flex: none;
+  width: 2.2rem; height: 1.4rem;
+  border: 1.5px solid currentColor;
+}
+.tinta--fotocopia .tinta__muestra { background: linear-gradient(90deg, #f1ede3 0 40%, #1a1a1a 40% 75%, #e8f53a 75%); }
+.tinta--riso .tinta__muestra      { background: linear-gradient(90deg, #f6efdf 0 30%, #1f2a6b 30% 55%, #e8457f 55% 80%, #ffd400 80%); }
+.tinta--herbario .tinta__muestra  { background: linear-gradient(90deg, #ece6f2 0 30%, #2e1d3b 30% 55%, #6b4f8a 55% 80%, #c9a77c 80%); }
+
+.desorden { display: block; margin-top: .8rem; }
+.desorden__texto { display: flex; justify-content: space-between; font-size: .9rem; }
+.desorden input { width: 100%; accent-color: var(--tinta); margin: .2rem 0 0; }
+.mesa__nota { margin: .5rem 0 0; font-size: .8rem; }
+
+@media (min-width: 64rem) {
+  .mesa {
+    position: fixed;
+    left: 1.25rem; bottom: 1.25rem;
+    margin: 0;
+    width: 15.5rem;
+  }
+  main { padding-left: 17rem; }
+}
+
+/* ---------- Pliegos ---------- */
+main {
+  padding-bottom: 3rem;
+}
+
+.pliego {
+  max-width: 74rem;
+  margin: 0 auto 3rem;
+  padding: 0 1rem;
+  display: grid;
+  gap: 0;
+}
+
+@media (min-width: 48rem) {
+  .pliego { grid-template-columns: 1fr 1fr; padding: 0 2rem; margin-bottom: 5rem; }
+  .pliego > .hoja--izq { box-shadow: inset -14px 0 18px -14px rgb(0 0 0 / .35); }
+  .pliego > .hoja--der { box-shadow: inset 14px 0 18px -14px rgb(0 0 0 / .35); }
+}
+
+.hoja {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  background-color: var(--papel);
+  padding: 2.5rem 1.4rem 3rem;
+  transition: background-color .4s ease;
+}
+@media (min-width: 48rem) {
+  .hoja { padding: 3.5rem 3rem 4rem; min-height: 36rem; }
+}
+
+/* grano de papel/tóner, encima del fondo y debajo del texto */
+.hoja::before {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--grano-opacidad);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.pliego .hoja--izq { transform: rotate(calc(var(--giro) * -.8)); }
+.pliego .hoja--der { transform: rotate(calc(var(--giro) * .5)) translateY(calc(var(--desorden) * 1rem)); }
+
+.folio {
+  position: absolute;
+  bottom: 1rem;
+  font-size: .8rem;
+}
+.hoja--izq .folio { left: 1.4rem; }
+.hoja--der .folio { right: 1.4rem; }
+
+/* ---------- Tipografía ---------- */
+.titulo-pliego,
+.portada__titulo,
+.subtitulo {
+  font-family: var(--letra-titulo);
+  color: var(--titulo-color);
+  text-transform: var(--titulo-transform);
+  letter-spacing: var(--titulo-espaciado);
+  font-weight: 400;
+  text-shadow: var(--corrimiento) calc(var(--corrimiento) * .5) 0 var(--registro);
+}
+
+.titulo-pliego {
+  margin: 0 0 1.25rem -.06em;
+  /* el título siempre cabe en su hoja: se mide con el ancho de la hoja (cqi) */
+  font-size: min(6.5rem, 19cqi);
+  line-height: .9;
+  transform: rotate(calc(var(--giro) * -3));
+  transform-origin: left bottom;
+  overflow-wrap: anywhere;
+}
+:root[data-tinta="riso"] .titulo-pliego { font-size: min(4.4rem, 8.6cqi); }
+:root[data-tinta="herbario"] .titulo-pliego {
+  font-weight: 700;
+  font-size: min(6rem, 13.5cqi);
+  font-variation-settings: "SOFT" 100;
+}
+
+.subtitulo {
+  margin: 0 0 1rem;
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  line-height: 1;
+  max-width: 14ch;
+}
+:root[data-tinta="riso"] .subtitulo { font-size: clamp(1.15rem, 3.2vw, 1.6rem); }
+:root[data-tinta="herbario"] .subtitulo { font-weight: 700; }
+
+.hoja p, .hoja li { max-width: 34em; }
+
+.entrada {
+  font-size: 1.35em;
+  line-height: 1.3;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+:root[data-tinta="herbario"] .entrada { font-weight: 600; font-style: italic; }
+
+.borrador,
+.material,
+.borrador-inline {
+  font-family: "Courier Prime", monospace;
+  font-size: .85rem;
+  line-height: 1.4;
+  color: var(--tinta);
+}
+.borrador {
+  display: inline-block;
+  margin: 0 0 1.25rem;
+  padding: .3rem .5rem;
+  border: 1.5px dashed currentColor;
+  background: var(--papel);
+}
+.material {
+  margin-top: 1.5rem;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  background: repeating-linear-gradient(45deg, var(--bloque) 0 6px, transparent 6px 14px);
+  border: 1.5px solid currentColor;
+}
+.material { font-weight: 700; }
+
+.nota-mano {
+  font-family: var(--letra-mano);
+  font-size: var(--tam-mano);
+  line-height: 1.05;
+  color: var(--tinta);
+  transform: rotate(calc(-4deg - var(--giro) * 4));
+}
+.nota-mano--margen { margin: 2rem 0 0 auto; max-width: 12em; text-align: right; }
+
+/* ---------- Portada ---------- */
+.portada { display: block; max-width: 60rem; }
+.hoja--portada {
+  min-height: min(88vh, 46rem);
+  padding: 2rem 1.4rem 4rem;
+  overflow: hidden;
+  transform: rotate(calc(var(--giro) * 1.2));
+  display: flex; flex-direction: column;
+}
+@media (min-width: 48rem) {
+  .hoja--portada { padding: 3rem 3.5rem 4rem; }
+}
+.portada__ejemplar { margin: 0; font-size: .9rem; }
+.portada__titulo {
+  margin: auto 0 .5rem;
+  line-height: .78;
+  font-size: clamp(6rem, 30vw, 17rem);
+  display: flex; align-items: flex-end; flex-wrap: wrap;
+}
+.portada__k {
+  display: inline-block;
+  font-size: 1.45em;
+  transform: rotate(calc(-6deg - var(--giro) * 8)) translateY(.06em);
+  transform-origin: left bottom;
+}
+.portada__resto {
+  display: inline-block;
+  transform: rotate(calc(var(--giro) * 5));
+  transform-origin: left bottom;
+}
+:root[data-tinta="riso"] .portada__titulo { font-size: clamp(4rem, 19vw, 11rem); }
+:root[data-tinta="herbario"] .portada__titulo { font-weight: 700; font-variation-settings: "SOFT" 100; }
+
+.portada__bajada {
+  margin: 1rem 0 0;
+  max-width: 26em;
+  font-size: 1.15rem;
+}
+.portada__bajada b { background: var(--acento); padding: 0 .2em; }
+.portada__nota {
+  position: absolute;
+  right: 1.4rem; top: 28%;
+  margin: 0;
+  max-width: 7em;
+  text-align: right;
+}
+.portada__pie { margin: 2rem 0 0; font-size: .8rem; }
+
+.grapa {
+  position: absolute;
+  left: .9rem;
+  width: .35rem; height: 2.4rem;
+  background: linear-gradient(90deg, #8a8a8a, #e6e6e6 45%, #7a7a7a);
+  border-radius: 1px;
+}
+.grapa--1 { top: 22%; }
+.grapa--2 { bottom: 22%; }
+
+/* ---------- Manifiesto ---------- */
+.ideas { list-style: none; margin: 0 0 2rem; padding: 0; }
+.ideas li {
+  margin: 0 0 .9rem;
+  padding-left: 1.4rem;
+  position: relative;
+}
+.ideas li::before {
+  content: "";
+  position: absolute; left: 0; top: .55em;
+  width: .7rem; height: .7rem;
+  background: var(--acento);
+  border: 1.5px solid var(--tinta);
+  transform: rotate(calc(20deg + var(--giro) * 20));
+}
+.ideas li:nth-child(even) { margin-left: calc(var(--desorden) * 1.5rem); }
+
+.cita {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  background: var(--bloque);
+  transform: rotate(calc(2deg + var(--giro) * 2));
+  max-width: 20em;
+}
+.cita p { margin: 0; font-size: 1.3em; line-height: 1.25; font-weight: 700; }
+.cita footer { margin-top: .4rem; }
+
+/* ---------- Volúmenes ---------- */
+.volumenes { list-style: none; margin: 0; padding: 0; }
+.volumenes li {
+  display: grid;
+  grid-template-columns: 4.6rem 1fr;
+  gap: .75rem;
+  padding: .6rem 0;
+  border-top: 1.5px solid var(--tinta);
+}
+.volumenes li:nth-child(odd) { transform: translateX(calc(var(--desorden) * .8rem)); }
+.vol {
+  font-family: var(--letra-mano);
+  font-size: calc(var(--tam-mano) * .85);
+  line-height: 1.1;
+}
+:root[data-tinta="fotocopia"] .vol { background: var(--acento); align-self: start; padding: 0 .2rem; }
+
+/* ---------- Equipo ---------- */
+.equipo { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 1rem 1.25rem; }
+.recorte {
+  padding: .9rem 1rem;
+  background: var(--papel);
+  border: 1.5px solid var(--tinta);
+  max-width: 15rem;
+  position: relative;
+}
+.recorte b {
+  display: block;
+  font-family: var(--letra-titulo);
+  color: var(--titulo-color);
+  font-weight: 400;
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-bottom: .3rem;
+  text-transform: var(--titulo-transform);
+}
+:root[data-tinta="riso"] .recorte b { font-size: 1.5rem; }
+:root[data-tinta="herbario"] .recorte b { font-weight: 700; }
+.recorte--1 { transform: rotate(calc(var(--giro) * -4)); }
+.recorte--2 { transform: rotate(calc(var(--giro) * 3)) translateY(calc(var(--desorden) * 1.2rem)); background: var(--bloque); }
+.recorte--3 { transform: rotate(calc(var(--giro) * 5)); }
+.recorte--4 { transform: rotate(calc(var(--giro) * -2)) translateX(calc(var(--desorden) * 1.5rem)); }
+.recorte--5 { transform: rotate(calc(var(--giro) * -5)); background: var(--bloque); }
+.borrador-inline { display: block; }
+
+/* ---------- Contratapa ---------- */
+.contratapa {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 1.5rem;
+  background: var(--papel);
+  border: 2px solid var(--tinta);
+  font-size: .95rem;
+}
+.contratapa p { margin: 0 0 .5rem; }
+.contratapa__aviso { font-size: .85rem; }
+.contratapa code { font-family: "Courier Prime", monospace; }
+
+/* ---------- Movimiento reducido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ---------- Impresión: el zine vuelve al papel ---------- */
+@media print {
+  .mesa, .saltar { display: none; }
+  body { background: #fff; }
+  main { padding: 0; }
+}

@@ -95,7 +95,17 @@ El equipo es multidisciplinar (estética, periodismo, psicología, sociología, 
 - **MCP / plugin**: herramientas extra que le dan a Claude nuevas capacidades (por ejemplo, ver una página en el navegador).
 - **Tokens de diseño**: los valores visuales reutilizables (colores, tipografías, tamaños) guardados con nombre.
 
-## 9. Estado
+## 9. Pilotos
+
+Las ramas `piloto/*` son **prototipos para presentar al equipo**, no versiones candidatas.
+
+- **No fijan decisiones.** Lo que aparece en un piloto (estética, textos, estructura, stack) es material de discusión; solo vale cuando se registra en `docs/decisiones.md`.
+- **Todo lo visual se marca como provisional**: la página lleva un sello visible de piloto y los textos se marcan como borrador.
+- Pueden saltarse partes del flujo normal (por ejemplo, mezclar varias direcciones del `DESIGN.md` a la vez) para que el equipo compare.
+- No se fusionan a `main` tal cual: si algo de un piloto se aprueba, se rehace en una rama `fanzine/<tema>`.
+- Viven en `src/<nombre-del-piloto>/` y no dependen de librerías.
+
+## 10. Estado
 
 - [ ] Repo creado y GitHub Pages activo
 - [ ] `DESIGN.md` v0

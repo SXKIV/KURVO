@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es" data-tinta="fotocopia">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KURVO alpha — piloto</title>
+  <meta name="description" content="Piloto alpha de KURVO, el fanzine digital de KURVOZINE. Nada está decidido.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Provisional: las tres direcciones cargan sus letras a la vez para poder compararlas. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Reenie+Beanie&family=Space+Mono:wght@400;700&family=Rubik+Mono+One&family=Special+Elite&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Fraunces:opsz,wght,SOFT@9..144,700,100&family=Caveat:wght@500&display=swap">
+  <link rel="stylesheet" href="estilos.css">
+  <script>
+    // Aplica la tinta guardada antes de pintar, para que no parpadee.
+    try {
+      var t = localStorage.getItem('kurvo-alpha-tinta');
+      if (t === 'fotocopia' || t === 'riso' || t === 'herbario') document.documentElement.dataset.tinta = t;
+      var d = localStorage.getItem('kurvo-alpha-desorden');
+      if (d !== null && !isNaN(+d)) document.documentElement.style.setProperty('--desorden', Math.min(1, Math.max(0, +d)));
+    } catch (e) {}
+  </script>
+  <script src="zine.js" defer></script>
+</head>
+<body>
+  <a class="saltar" href="#pliego-manifiesto">Saltar al primer pliego</a>
+
+  <!-- Sello fijo: este piloto no fija decisiones -->
+  <p class="sello" role="note"><strong>ALPHA</strong> <span>nada está decidido</span></p>
+
+  <!-- Controles: quien visita interviene el zine -->
+  <aside class="mesa" aria-labelledby="mesa-titulo">
+    <h2 id="mesa-titulo" class="mesa__titulo">Cambia la tinta</h2>
+    <fieldset class="tintas">
+      <legend class="visualmente-oculto">Tinta del zine</legend>
+      <label class="tinta tinta--fotocopia">
+        <input type="radio" name="tinta" value="fotocopia" checked>
+        <span class="tinta__muestra" aria-hidden="true"></span>
+        <span class="tinta__nombre">Fotocopia de facultad</span>
+      </label>
+      <label class="tinta tinta--riso">
+        <input type="radio" name="tinta" value="riso">
+        <span class="tinta__muestra" aria-hidden="true"></span>
+        <span class="tinta__nombre">Riso de correspondencia</span>
+      </label>
+      <label class="tinta tinta--herbario">
+        <input type="radio" name="tinta" value="herbario">
+        <span class="tinta__muestra" aria-hidden="true"></span>
+        <span class="tinta__nombre">Herbario sensorial</span>
+      </label>
+    </fieldset>
+    <label class="desorden">
+      <span class="desorden__texto"><span aria-hidden="true">derecho</span><span class="visualmente-oculto">Nivel de desorden, de derecho a kurvo</span><span aria-hidden="true">kurvo</span></span>
+      <input type="range" id="desorden" min="0" max="1" step="0.05" value="0.5">
+    </label>
+    <p class="mesa__nota">Tu elección se queda en este navegador.</p>
+  </aside>
+
+  <main id="zine">
+
+    <!-- PORTADA -->
+    <section class="pliego portada" aria-labelledby="portada-titulo">
+      <div class="hoja hoja--portada">
+        <p class="portada__ejemplar" aria-live="polite">ejemplar <span id="ejemplar">—</span></p>
+        <h1 id="portada-titulo" class="portada__titulo">
+          <span class="portada__k">K</span><span class="portada__resto">URVO</span>
+        </h1>
+        <p class="portada__bajada">el fanzine digital de <b>KURVOZINE</b>, colectivo de arte impreso de Santiago de Chile</p>
+        <p class="nota-mano portada__nota">esto también se dobla</p>
+        <div class="grapa grapa--1" aria-hidden="true"></div>
+        <div class="grapa grapa--2" aria-hidden="true"></div>
+        <p class="portada__pie">nombre temporal · borrador para el equipo</p>
+      </div>
+    </section>
+
+    <!-- PLIEGO 1: MANIFIESTO -->
+    <section class="pliego" id="pliego-manifiesto" aria-labelledby="manifiesto-titulo">
+      <div class="hoja hoja--izq">
+        <span class="folio" aria-hidden="true">p. 2</span>
+        <h2 id="manifiesto-titulo" class="titulo-pliego">Manifiesto</h2>
+        <p class="borrador">[MANIFIESTO PENDIENTE — Luna] · Lo que sigue es un borrador armado con el resumen de <i>kurvozine_contexto.md</i>, no un texto del colectivo.</p>
+        <p class="entrada">Publicamos <mark>solo en papel</mark>, en tirajes que se acaban.</p>
+        <p>Frente a la saturación digital, rescatamos medios que parecen obsoletos: la fotocopia, la cartulina reciclada, el olor de la lavanda, la voz al teléfono.</p>
+      </div>
+      <div class="hoja hoja--der">
+        <span class="folio" aria-hidden="true">p. 3</span>
+        <ul class="ideas">
+          <li>El arte físico es parte de la identidad y la memoria.</li>
+          <li>Lo recto y normado frente a lo que se dobla.</li>
+          <li>Aprender haciendo, atreverse.</li>
+          <li>Imaginar mundos posibles, abrir paso a nuevas voces.</li>
+        </ul>
+        <blockquote class="cita">
+          <p>“Kurvo es producto de esta generación”</p>
+          <footer>— Xakal</footer>
+        </blockquote>
+        <p class="nota-mano nota-mano--margen">¿y si la web también se acaba?</p>
+      </div>
+    </section>
+
+    <!-- PLIEGO 2: HISTORIA Y VOLÚMENES -->
+    <section class="pliego" aria-labelledby="historia-titulo">
+      <div class="hoja hoja--izq">
+        <span class="folio" aria-hidden="true">p. 4</span>
+        <h2 id="historia-titulo" class="titulo-pliego">Historia</h2>
+        <p class="borrador">[BORRADOR — revisar con Agus]</p>
+        <p class="entrada">2021. Una Facultad de Derecho que se sentía gris.</p>
+        <p>Agus impulsa un zine. El nombre juega con <b>derecho / curvo</b>. Hasta marzo de 2025: 13 volúmenes en unos tres años y medio, impresos, finitos, autogestionados.</p>
+        <p>El primer aniversario fue en un departamento vacío, con muebles de otra casa y vecines tirando tallarines crudos a la muestra.</p>
+        <p>Después: Kasa de las Flores (Aniversario III, diciembre de 2024) y la Feria Migra en Buenos Aires (2025), el primer cruce de frontera.</p>
+      </div>
+      <div class="hoja hoja--der">
+        <span class="folio" aria-hidden="true">p. 5</span>
+        <h3 class="subtitulo">Volúmenes que se salieron del papel plano</h3>
+        <ol class="volumenes">
+          <li><span class="vol">Vol. 5</span> Cada ejemplar llevaba lavanda recolectada en Santiago. El zine se huele.</li>
+          <li><span class="vol">Vol. 8</span> Cartulina española reciclada de imprenta, casi imposible de repetir.</li>
+          <li><span class="vol">Vol. 9</span> El correo electrónico y el cruce de fronteras. Convocatoria abierta.</li>
+          <li><span class="vol">Vol. 10</span> A 50 años del golpe de Estado de 1973.</li>
+          <li><span class="vol">Vol. ?</span> Llamadas telefónicas, para vivirse con varios sentidos.</li>
+          <li><span class="vol">pronto</span> Un libro-objeto en desarrollo.</li>
+        </ol>
+        <p class="material">[MATERIAL PENDIENTE: escaneos de portadas]</p>
+      </div>
+    </section>
+
+    <!-- PLIEGO 3: EQUIPO -->
+    <section class="pliego pliego--equipo" aria-labelledby="equipo-titulo">
+      <div class="hoja hoja--izq">
+        <span class="folio" aria-hidden="true">p. 6</span>
+        <h2 id="equipo-titulo" class="titulo-pliego">Quiénes</h2>
+        <p class="borrador">[BORRADOR — cada quien escribe lo suyo]</p>
+        <p class="entrada">Cinco nombres, cinco recortes. Nadie tiene el mismo molde.</p>
+      </div>
+      <div class="hoja hoja--der">
+        <span class="folio" aria-hidden="true">p. 7</span>
+        <ul class="equipo">
+          <li class="recorte recorte--1"><b>Agus</b> fundó el zine en 2021.</li>
+          <li class="recorte recorte--2"><b>Luna</b> llegó con el Vol. 5.</li>
+          <li class="recorte recorte--3"><b>Malú</b> eligió obras para el Vol. 9.</li>
+          <li class="recorte recorte--4"><b>Xakal</b> llegó con el Vol. 9.</li>
+          <li class="recorte recorte--5"><b>Morra</b> <span class="borrador-inline">[TEXTO PENDIENTE — Morra]</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CONTRATAPA -->
+    <footer class="contratapa">
+      <p>Instagram <a href="https://www.instagram.com/kurvozine/">@kurvozine</a> · sitio antiguo <a href="https://kurvozine.neocities.org/">kurvozine.neocities.org</a></p>
+      <p class="contratapa__aviso">Piloto <code>piloto/alpha</code>. Las tres tintas son las direcciones del borrador de DESIGN.md. Ninguna está elegida.</p>
+    </footer>
+  </main>
+</body>
+</html>
