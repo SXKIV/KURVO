@@ -1,4 +1,4 @@
-# KURVOClaude.md — Contexto de KURVO para Claude Code
+# CLAUDE.md — Contexto de KURVO para Claude Code
 
 > Archivo de contexto del repositorio `kurvo`. Léelo completo al empezar cada sesión.
 > Este proyecto **no** tiene relación con SIIMPLE ni con otros repos: ignora cualquier contexto ajeno a este archivo.
@@ -60,7 +60,7 @@ Límites que no se rompen:
 
 ```
 kurvo/
-├─ KURVOClaude.md        ← este archivo
+├─ CLAUDE.md             ← este archivo
 ├─ DESIGN.md             ← lenguaje visual y tokens (pendiente)
 ├─ README.md
 ├─ docs/
